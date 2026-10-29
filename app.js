@@ -15,7 +15,7 @@ const DEFAULT_FRAMES = [
         price: 3200,
         sizes: ["S", "M", "L"],
         description: "Cuadro de ruta superligero fabricado con fibra de carbono Toray T1100 de grado aeroespacial. Optimizado para máxima rigidez y aerodinámica en ascensos exigentes.",
-        image: "C:/Users/PC1298/.gemini/antigravity/brain/4e7510ed-5baf-42e3-a9f5-2e9bb71bb392/carbon_frame_1780578497504.png"
+        image: "img/carbono.png"
     },
     {
         id: "frame-2",
@@ -25,7 +25,7 @@ const DEFAULT_FRAMES = [
         price: 4500,
         sizes: ["M", "L", "XL"],
         description: "Cuadro de gravel indestructible de titanio Grado 9 (Ti-3Al-2.5V) de doble conificado. Combina una absorción de vibraciones inigualable con anclajes para portabultos y aventuras de larga distancia.",
-        image: "C:/Users/PC1298/.gemini/antigravity/brain/4e7510ed-5baf-42e3-a9f5-2e9bb71bb392/titanium_frame_1780578511254.png"
+        image: "img/titanio.png"
     },
     {
         id: "frame-3",
@@ -35,7 +35,7 @@ const DEFAULT_FRAMES = [
         price: 2850,
         sizes: ["S", "M", "L", "XL"],
         description: "Cuadro rígido de montaña diseñado para Cross-Country competitivo. Geometría agresiva, guiado de cables interno y un laminado de carbono específico para disipar impactos de senderos técnicos.",
-        image: "C:/Users/PC1298/.gemini/antigravity/brain/4e7510ed-5baf-42e3-a9f5-2e9bb71bb392/carbon_frame_1780578497504.png"
+        image: "img/carbono_xc_pro.png"
     }
 ];
 
@@ -44,12 +44,31 @@ class FrameInventoryModel {
         this.storageKey = "velocraft_inventory";
         this.init();
     }
-
-    init() {
-        if (!localStorage.getItem(this.storageKey)) {
-            localStorage.setItem(this.storageKey, JSON.stringify(DEFAULT_FRAMES));
-        }
+init() {
+    if (!localStorage.getItem(this.storageKey)) {
+        localStorage.setItem(this.storageKey, JSON.stringify(DEFAULT_FRAMES));
     }
+
+    const frames = this.getAll();
+
+    const carbono = frames.find(frame => frame.id === "frame-1");
+    const titanio = frames.find(frame => frame.id === "frame-2");
+    const carbonoXC = frames.find(frame => frame.id === "frame-3");
+
+    if (carbono) {
+        carbono.image = "img/carbono.png";
+    }
+
+    if (titanio) {
+        titanio.image = "img/titanio.png";
+    }
+
+    if (carbonoXC) {
+        carbonoXC.image = "img/carbono_xc_pro.png";
+    }
+
+    this.save(frames);
+}
 
     getAll() {
         return JSON.parse(localStorage.getItem(this.storageKey)) || [];
