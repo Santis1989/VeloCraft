@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestiona y adquiere los mejores cuadros de bicicleta de fibra de carbono y titanio. Catálogo de gama alta con especificaciones técnicas detalladas.">
+    <title>VeloCraft | Cuadros de Carbono y Titanio de Alta Gama</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="sticky-top py-3">
+        <div class="container-fluid px-md-5">
+            <div class="row align-items-center g-3">
+                <div class="col-12 col-md-4 col-lg-3 text-center text-md-start">
+                    <h1 class="brand-title m-0"><i class="bi bi-hexagon-half me-2"></i>VELOCRAFT</h1>
+                </div>
+                
+                <!-- Search and Filtering -->
+                <div class="col-12 col-sm-8 col-md-5 col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-secondary text-secondary border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" id="searchInput" class="form-control bg-transparent border-secondary border-start-0 text-white" placeholder="Buscar cuadro por nombre o características...">
+                    </div>
+                </div>
+                
+                <div class="col-12 col-sm-4 col-md-3 col-lg-3 text-center text-sm-end">
+                    <button class="btn btn-premium w-100" id="btnToggleManager" type="button" data-bs-toggle="collapse" data-bs-target="#managerPanel" aria-expanded="false" aria-controls="managerPanel">
+                        <i class="bi bi-sliders me-2"></i>Consola Admin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container-fluid px-md-5 py-4">
+        
+        <!-- Stats Dashboard Section -->
+        <section class="row mb-4 g-3" id="statsSection">
+            <div class="col-6 col-lg-3">
+                <div class="glass-panel stat-pill">
+                    <div class="text-secondary text-uppercase small font-monospace">Modelos Totales</div>
+                    <div class="stat-val text-white" id="statTotalCount">0</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="glass-panel stat-pill">
+                    <div class="text-secondary text-uppercase small font-monospace">Fibra de Carbono</div>
+                    <div class="stat-val text-info" id="statCarbonCount">0</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="glass-panel stat-pill">
+                    <div class="text-secondary text-uppercase small font-monospace">Titanio Puro</div>
+                    <div class="stat-val text-warning" id="statTitaniumCount">0</div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="glass-panel stat-pill">
+                    <div class="text-secondary text-uppercase small font-monospace">Valor Total Inventario</div>
+                    <div class="stat-val text-success" id="statTotalValue">$0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Layout Split -->
+        <div class="row g-4">
+            
+            <!-- Sidebar Admin Panel (Collapsible) -->
+            <aside class="col-12 col-lg-4 col-xl-3 collapse show" id="managerPanel">
+                <div class="glass-panel p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="h5 m-0 text-white"><i class="bi bi-plus-circle-dotted me-2 text-info"></i>Agregar Cuadro</h2>
+                        <button type="button" class="btn-close d-lg-none" data-bs-toggle="collapse" data-bs-target="#managerPanel" aria-label="Cerrar"></button>
+                    </div>
+                    
+                    <!-- Form for Adding and Updating Items -->
+                    <form id="frameForm" novalidate>
+                        <input type="hidden" id="frameId">
+                        
+                        <div class="mb-3">
+                            <label for="frameName" class="form-label">Nombre del Modelo</label>
+                            <input type="text" class="form-control" id="frameName" placeholder="Ej: VeloCraft Aero 900" required>
+                            <div class="invalid-feedback">Por favor, ingresa el nombre del modelo.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="frameMaterial" class="form-label">Material de Fabricación</label>
+                            <select class="form-select" id="frameMaterial" required>
+                                <option value="" selected disabled>Selecciona material...</option>
+                                <option value="carbon">Fibra de Carbono (Carbon Weave)</option>
+                                <option value="titanium">Titanio Grado 9 (Ti-3Al-2.5V)</option>
+                            </select>
+                            <div class="invalid-feedback">Por favor, selecciona un material.</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="frameWeight" class="form-label">Peso (Gramos)</label>
+                                <input type="number" class="form-control" id="frameWeight" placeholder="Ej: 950" min="400" max="3000" required>
+                                <div class="invalid-feedback">Peso inválido (400g - 3000g).</div>
+                            </div>
+                            <div class="col-6">
+                                <label for="framePrice" class="form-label">Precio ($ USD)</label>
+                                <input type="number" class="form-control" id="framePrice" placeholder="Ej: 2450" min="500" max="15000" required>
+                                <div class="invalid-feedback">Precio inválido ($500 - $15000).</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="frameSizes" class="form-label">Tallas Disponibles</label>
+                            <div class="d-flex flex-wrap gap-2 pt-1" id="sizesContainer">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="sizeS" value="S">
+                                    <label class="form-check-label text-white-50" for="sizeS">S</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="sizeM" value="M">
+                                    <label class="form-check-label text-white-50" for="sizeM">M</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="sizeL" value="L">
+                                    <label class="form-check-label text-white-50" for="sizeL">L</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="sizeXL" value="XL">
+                                    <label class="form-check-label text-white-50" for="sizeXL">XL</label>
+                                </div>
+                            </div>
+                            <div class="text-danger small mt-1 d-none" id="sizeValidationError">Selecciona al menos una talla.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="frameDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="frameDescription" rows="3" placeholder="Detalles de la geometría, rigidez o tecnología empleada..." required></textarea>
+                            <div class="invalid-feedback">Ingresa una descripción técnica.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="frameImage" class="form-label">Imagen Prediseñada</label>
+                            <select class="form-select" id="frameImage">
+                                <option value="C:/Users/PC1298/.gemini/antigravity/brain/4e7510ed-5baf-42e3-a9f5-2e9bb71bb392/carbon_frame_1780578497504.png">Render de Carbono (Predeterminado)</option>
+                                <option value="C:/Users/PC1298/.gemini/antigravity/brain/4e7510ed-5baf-42e3-a9f5-2e9bb71bb392/titanium_frame_1780578511254.png">Render de Titanio (Predeterminado)</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-premium w-100" id="btnSaveFrame" type="submit">
+                            <i class="bi bi-save me-2"></i>Guardar Cuadro
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Catalog Section -->
+            <section class="col-12 col-lg-8 col-xl-9">
+                <div class="glass-panel p-4 mb-4">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                        <div class="d-flex gap-2" id="materialFilters">
+                            <button class="btn btn-filter active" data-material="all">Todos</button>
+                            <button class="btn btn-filter" data-material="carbon">Carbono</button>
+                            <button class="btn btn-filter" data-material="titanium">Titanio</button>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="text-secondary small text-nowrap">Ordenar por:</span>
+                            <select id="sortBy" class="form-select bg-transparent border-secondary text-white py-1 py-sm-2" style="width: auto;">
+                                <option value="name">Nombre</option>
+                                <option value="price-asc">Precio: Menor a Mayor</option>
+                                <option value="price-desc">Precio: Mayor a Menor</option>
+                                <option value="weight">Peso: Menor a Mayor</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Catalog Grid -->
+                <div class="row g-4" id="catalogGrid">
+                    <!-- Cards will be dynamically injected here via JS -->
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-4 mt-5 border-top border-secondary text-center text-secondary">
+        <div class="container">
+            <p class="m-0 font-monospace small">&copy; 2026 VELOCRAFT INC. - Carbon & Titanium Masterpieces.</p>
+        </div>
+    </footer>
+
+    <!-- Detail View Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Especificaciones Técnicas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4" id="detailModalBody">
+                    <!-- Details will be injected here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-premium" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-premium" onclick="alert('Funcionalidad de compra simulada exitosa!')">Simular Compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit/Update Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel"><i class="bi bi-pencil-square me-2 text-warning"></i>Editar Cuadro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="editForm" novalidate>
+                        <input type="hidden" id="editFrameId">
+                        
+                        <div class="mb-3">
+                            <label for="editFrameName" class="form-label">Nombre del Modelo</label>
+                            <input type="text" class="form-control" id="editFrameName" required>
+                            <div class="invalid-feedback">Por favor, ingresa el nombre.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editFrameMaterial" class="form-label">Material de Fabricación</label>
+                            <select class="form-select" id="editFrameMaterial" required>
+                                <option value="carbon">Fibra de Carbono (Carbon Weave)</option>
+                                <option value="titanium">Titanio Grado 9 (Ti-3Al-2.5V)</option>
+                            </select>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="editFrameWeight" class="form-label">Peso (g)</label>
+                                <input type="number" class="form-control" id="editFrameWeight" min="400" max="3000" required>
+                                <div class="invalid-feedback">Rango: 400g - 3000g.</div>
+                            </div>
+                            <div class="col-6">
+                                <label for="editFramePrice" class="form-label">Precio ($ USD)</label>
+                                <input type="number" class="form-control" id="editFramePrice" min="500" max="15000" required>
+                                <div class="invalid-feedback">Rango: $500 - $15000.</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editFrameSizes" class="form-label">Tallas Disponibles</label>
+                            <div class="d-flex flex-wrap gap-2 pt-1" id="editSizesContainer">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="editSizeS" value="S">
+                                    <label class="form-check-label text-white-50" for="editSizeS">S</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="editSizeM" value="M">
+                                    <label class="form-check-label text-white-50" for="editSizeM">M</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="editSizeL" value="L">
+                                    <label class="form-check-label text-white-50" for="editSizeL">L</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="editSizeXL" value="XL">
+                                    <label class="form-check-label text-white-50" for="editSizeXL">XL</label>
+                                </div>
+                            </div>
+                            <div class="text-danger small mt-1 d-none" id="editSizeValidationError">Selecciona al menos una talla.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editFrameDescription" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="editFrameDescription" rows="3" required></textarea>
+                            <div class="invalid-feedback">Ingresa una descripción técnica.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="editFrameImage" class="form-label">Imagen Prediseñada</label>
+                            <select class="form-select" id="editFrameImage">
+                                <option value="C:/Users/PC1298/.gemini/antigravity/brain/4e7510ed-5baf-42e3-a9f5-2e9bb71bb392/carbon_frame_1780578497504.png">Render de Carbono</option>
+                                <option value="C:/Users/PC1298/.gemini/antigravity/brain/4e7510ed-5baf-42e3-a9f5-2e9bb71bb392/titanium_frame_1780578511254.png">Render de Titanio</option>
+                            </select>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-outline-premium" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-premium" id="btnUpdateFrame">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="actionToast" class="toast custom-toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center">
+                    <i id="toastIcon" class="bi me-2 fs-5"></i>
+                    <span id="toastMessage">Operación completada.</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- Custom Application JS -->
+    <script src="app.js"></script>
+</body>
+</html>

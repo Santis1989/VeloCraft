@@ -1,0 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-dark: #0f1013;
+    --bg-card: rgba(22, 24, 30, 0.7);
+    --bg-card-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    
+    /* Neon accents for Carbon (Teal/Cyan) and Titanium (Warm Silver/Amber) */
+    --color-carbon: #00f2fe;
+    --color-carbon-rgb: 0, 242, 254;
+    --color-titanium: #ffaa44;
+    --color-titanium-rgb: 255, 170, 68;
+    
+    --accent-glow: rgba(0, 242, 254, 0.15);
+    
+    --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 170, 68, 0.05) 0px, transparent 50%),
+        linear-gradient(rgba(255,255,255,0.004) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.004) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 20px 20px, 20px 20px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* Glassmorphism UI Components */
+.glass-panel {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: var(--transition-smooth);
+}
+
+.glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Catalog Card styling */
+.frame-card {
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.frame-card-img-wrapper {
+    position: relative;
+    padding-top: 60%; /* 5:3 Aspect Ratio */
+    background: #181a20;
+    overflow: hidden;
+}
+
+.frame-card-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-smooth);
+}
+
+.frame-card:hover .frame-card-img {
+    transform: scale(1.05);
+}
+
+.frame-card-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.badge-carbon {
+    background: rgba(0, 242, 254, 0.15);
+    border: 1px solid var(--color-carbon);
+    color: var(--color-carbon);
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
+}
+
+.badge-titanium {
+    background: rgba(255, 170, 68, 0.15);
+    border: 1px solid var(--color-titanium);
+    color: var(--color-titanium);
+    text-shadow: 0 0 8px rgba(255, 170, 68, 0.5);
+}
+
+.frame-card-body {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.frame-price {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #fff, #a1a1aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Custom styled inputs & Forms */
+.form-control, .form-select {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 12px;
+    transition: var(--transition-smooth);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-carbon);
+    box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.2);
+    color: var(--text-primary);
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+/* Header design */
+header {
+    border-bottom: 1px solid var(--bg-card-border);
+    background: rgba(15, 16, 19, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.brand-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-carbon) 0%, var(--color-titanium) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Category Quick Filters */
+.btn-filter {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.btn-filter:hover, .btn-filter.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-filter.active[data-material="carbon"] {
+    background: rgba(0, 242, 254, 0.15);
+    border-color: var(--color-carbon);
+    color: var(--color-carbon);
+}
+
+.btn-filter.active[data-material="titanium"] {
+    background: rgba(255, 170, 68, 0.15);
+    border-color: var(--color-titanium);
+    color: var(--color-titanium);
+}
+
+/* Custom premium primary action buttons */
+.btn-premium {
+    background: linear-gradient(135deg, var(--color-carbon) 0%, #00d2fc 100%);
+    border: none;
+    color: #0f1013;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 12px 24px;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 20px rgba(0, 242, 254, 0.2);
+}
+
+.btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 242, 254, 0.35);
+    color: #0f1013;
+}
+
+.btn-premium:active {
+    transform: translateY(0);
+}
+
+.btn-outline-premium {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: var(--transition-smooth);
+}
+
+.btn-outline-premium:hover {
+    border-color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Stats dashboard */
+.stat-pill {
+    padding: 16px;
+    text-align: center;
+}
+
+.stat-val {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Modal styling */
+.modal-content {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--bg-card-border);
+    box-shadow: 0 10px 50px rgba(0,0,0,0.6);
+    border-radius: 20px;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--bg-card-border);
+    padding: 24px;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--bg-card-border);
+    padding: 24px;
+}
+
+.btn-close {
+    filter: invert(1) grayscale(1) brightness(2);
+}
+
+/* Keyframes and Entry Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Toast custom overrides */
+.toast-container {
+    z-index: 1100;
+}
+
+.custom-toast {
+    background: rgba(22, 24, 30, 0.95) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--bg-card-border) !important;
+    color: var(--text-primary);
+}
+
+.custom-toast.success {
+    border-left: 4px solid var(--color-carbon) !important;
+}
+
+.custom-toast.info {
+    border-left: 4px solid var(--color-titanium) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Grid & Responsive Adjustments */
+@media (max-width: 768px) {
+    .brand-title {
+        font-size: 1.4rem;
+    }
+    .stat-pill {
+        padding: 10px;
+    }
+    .stat-val {
+        font-size: 1.4rem;
+    }
+}
