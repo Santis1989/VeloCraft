@@ -9,6 +9,17 @@
 // 1. PRODUCTOS INICIALES
 // ========================================
 
+
+/* ==========================================
+   CONFIGURACIÓN DE MATERIALES
+   ========================================== */
+
+const MATERIAL_STORAGE_KEY = "velocraft_materials";
+
+const DEFAULT_MATERIALS = [
+    { id: "carbon", name: "Fibra de Carbono" },
+    { id: "titanium", name: "Titanio Grado 9" }
+];
 const DEFAULT_FRAMES = [
     {
         id: "frame-1",
@@ -20,6 +31,8 @@ const DEFAULT_FRAMES = [
         description: "Cuadro de ruta superligero fabricado con fibra de carbono Toray T1100 de grado aeroespacial. Optimizado para máxima rigidez y aerodinámica en ascensos exigentes.",
         image: "img/carbono.png"
     },
+
+
     {
         id: "frame-2",
         name: "Titanium Adventure Ti-9",
@@ -429,15 +442,18 @@ function renderStats() {
 
 function createCardElement(frame) {
 
-    const isCarbon = frame.material === "carbon";
+const isCarbon = frame.material === "carbon";
+const isTitanium = frame.material === "titanium";
 
-    const materialBadge = isCarbon
-        ? `<span class="frame-card-badge badge-carbon">
-               <i class="bi bi-cpu me-1"></i>Carbono
-           </span>`
-        : `<span class="frame-card-badge badge-titanium">
-               <i class="bi bi-shield-shaded me-1"></i>Titanio
-           </span>`;
+const materialBadge = `
+    <span class="frame-card-badge ${
+        isCarbon ? "badge-carbon" :
+        isTitanium ? "badge-titanium" : "bg-secondary"
+    }">
+        <i class="bi bi-layers me-1"></i>
+        ${escapeHTML(nombreMaterial(frame.material))}
+    </span>
+`;
 
     const sizeBadges = (frame.sizes || [])
         .map(size => `
@@ -702,15 +718,16 @@ window.viewDetails = function(id) {
 
     if (!frame) return;
 
-    const isCarbon = frame.material === "carbon";
+const isCarbon = frame.material === "carbon";
+const isTitanium = frame.material === "titanium";
 
-    const materialText = isCarbon
-        ? "Fibra de Carbono (Toray T1100 Aero)"
-        : "Titanio Grado 9 (Ti-3Al-2.5V)";
+const materialText = nombreMaterial(frame.material);
 
-    const materialClass = isCarbon
-        ? "text-info"
-        : "text-warning";
+const materialClass = isCarbon
+    ? "text-info"
+    : isTitanium
+        ? "text-warning"
+        : "text-success";
 
     UI.detailModalBody.innerHTML = `
         <div class="row g-4">
@@ -1411,3 +1428,426 @@ document.getElementById("editModal")
 console.log(
     "Vista previa de imágenes activada correctamente."
 );
+
+/* ==========================================
+   VELOCRAFT - SELECTORES RESPONSIVE
+   ========================================== */
+
+function configurarSelectorResponsive(id) {
+
+    const select = document.getElementById(id);
+
+    if (!select) return;
+
+    // Evitar crear el menú dos veces.
+    if (select.dataset.responsive === "true") return;
+
+    select.dataset.responsive = "true";
+
+    // Crear el contenedor.
+    const contenedor = document.createElement("div");
+    contenedor.className = "material-select-wrapper";
+
+    // Crear el botón desplegable.
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "material-select-button";
+
+    // Crear la lista de opciones.
+    const lista = document.createElement("div");
+    lista.className = "material-select-options";
+    lista.hidden = true;
+
+    function actualizarBoton() {
+        const opcion = select.selectedOptions[0];
+
+        boton.textContent = opcion
+            ? opcion.textContent.trim()
+            : "Seleccioná un material";
+    }
+
+    // Crear las opciones a partir del select original.
+    Array.from(select.options).forEach(opcion => {
+
+        if (opcion.disabled || opcion.value === "") return;
+
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "material-select-option";
+        item.textContent = opcion.textContent.trim();
+
+        item.addEventListener("click", () => {
+
+            select.value = opcion.value;
+
+            // Notificar el cambio.
+            select.dispatchEvent(
+                new Event("change", { bubbles: true })
+            );
+
+            actualizarBoton();
+
+            lista.hidden = true;
+            boton.setAttribute("aria-expanded", "false");
+        });
+
+        lista.appendChild(item);
+    });
+
+    boton.setAttribute("aria-expanded", "false");
+    boton.setAttribute("aria-haspopup", "true");
+
+    boton.addEventListener("click", () => {
+        const abrir = lista.hidden;
+
+        document.querySelectorAll(
+            ".material-select-options"
+        ).forEach(menu => {
+            menu.hidden = true;
+        });
+
+        lista.hidden = !abrir;
+        boton.setAttribute("aria-expanded", String(abrir));
+    });
+
+    // Cerrar al hacer clic fuera.
+    document.addEventListener("click", event => {
+        if (!contenedor.contains(event.target)) {
+            lista.hidden = true;
+            boton.setAttribute("aria-expanded", "false");
+        }
+    });
+
+    // Sincronizar cambios hechos desde JavaScript.
+    select.addEventListener("change", actualizarBoton);
+
+    // Mantener el select original en el formulario.
+    select.classList.add("material-select-original");
+
+    select.insertAdjacentElement("afterend", contenedor);
+
+    contenedor.appendChild(boton);
+    contenedor.appendChild(lista);
+
+    actualizarBoton();
+
+    // Actualizar después de reiniciar el formulario.
+    select.form?.addEventListener("reset", () => {
+        setTimeout(() => {
+            actualizarBoton();
+            lista.hidden = true;
+            boton.setAttribute("aria-expanded", "false");
+        }, 0);
+    });
+
+    // Sincronizar al abrir la edición.
+    if (id === "editFrameMaterial") {
+        document.getElementById("editModal")
+            ?.addEventListener("show.bs.modal", () => {
+                actualizarBoton();
+                lista.hidden = true;
+                boton.setAttribute("aria-expanded", "false");
+            });
+    }
+}
+
+configurarSelectorResponsive("frameMaterial");
+configurarSelectorResponsive("editFrameMaterial");
+
+/* ==========================================
+   20. GESTIÓN DINÁMICA DE MATERIALES
+   ========================================== */
+
+
+function obtenerMateriales() {
+    try {
+        const guardados = JSON.parse(
+            localStorage.getItem(MATERIAL_STORAGE_KEY)
+        );
+
+        if (Array.isArray(guardados)) {
+            return guardados;
+        }
+    } catch (error) {
+        console.error("Error leyendo materiales:", error);
+    }
+
+    return [...DEFAULT_MATERIALS];
+}
+
+function guardarMateriales(materiales) {
+    localStorage.setItem(
+        MATERIAL_STORAGE_KEY,
+        JSON.stringify(materiales)
+    );
+}
+
+function nombreMaterial(id) {
+    const material = obtenerMateriales().find(
+        item => item.id === id
+    );
+
+    return material ? material.name : id;
+}
+
+// Actualizar los selectores originales y sus menús responsive.
+function actualizarSelectorMaterial(id) {
+    const select = document.getElementById(id);
+    if (!select) return;
+
+    const valorAnterior = select.value;
+    const materiales = obtenerMateriales();
+
+    select.replaceChildren();
+
+    if (id === "frameMaterial") {
+        const placeholder = new Option(
+            "Selecciona material...",
+            "",
+            false,
+            false
+        );
+        placeholder.disabled = true;
+        select.add(placeholder);
+    }
+
+    materiales.forEach(material => {
+        select.add(new Option(material.name, material.id));
+    });
+
+    if (materiales.some(m => m.id === valorAnterior)) {
+        select.value = valorAnterior;
+    } else if (id === "frameMaterial") {
+        select.value = "";
+    }
+
+    const contenedor = select.nextElementSibling;
+
+    if (
+        !contenedor ||
+        !contenedor.classList.contains("material-select-wrapper")
+    ) {
+        return;
+    }
+
+    const boton = contenedor.querySelector(
+        ".material-select-button"
+    );
+
+    const lista = contenedor.querySelector(
+        ".material-select-options"
+    );
+
+    if (!boton || !lista) return;
+
+    lista.replaceChildren();
+
+    materiales.forEach(material => {
+        const opcion = document.createElement("button");
+
+        opcion.type = "button";
+        opcion.className = "material-select-option";
+        opcion.textContent = material.name;
+
+        opcion.addEventListener("click", () => {
+            select.value = material.id;
+
+            select.dispatchEvent(
+                new Event("change", { bubbles: true })
+            );
+
+            lista.hidden = true;
+            boton.setAttribute("aria-expanded", "false");
+        });
+
+        lista.appendChild(opcion);
+    });
+
+    select.dispatchEvent(
+        new Event("change", { bubbles: true })
+    );
+
+    lista.hidden = true;
+    boton.setAttribute("aria-expanded", "false");
+}
+
+function actualizarSelectoresMateriales() {
+    actualizarSelectorMaterial("frameMaterial");
+    actualizarSelectorMaterial("editFrameMaterial");
+}
+
+// Mostrar materiales registrados.
+function mostrarMateriales() {
+    const contenedor = document.getElementById("materialsList");
+    if (!contenedor) return;
+
+    contenedor.replaceChildren();
+
+    obtenerMateriales().forEach(material => {
+        const fila = document.createElement("div");
+
+        fila.className =
+            "d-flex justify-content-between align-items-center " +
+            "gap-2 p-2 border border-secondary rounded";
+
+        const nombre = document.createElement("span");
+        nombre.className = "text-white";
+        nombre.textContent = material.name;
+
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "btn btn-outline-danger btn-sm";
+        boton.innerHTML = '<i class="bi bi-trash"></i>';
+        boton.title = "Eliminar material";
+
+        boton.addEventListener("click", () => {
+            eliminarMaterial(material.id);
+        });
+
+        fila.append(nombre, boton);
+        contenedor.appendChild(fila);
+    });
+}
+
+// Agregar un material.
+const formularioMateriales = document.getElementById("materialForm");
+
+if (formularioMateriales) {
+    formularioMateriales.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const campo = document.getElementById("newMaterialName");
+        const nombre = campo.value.trim().replace(/\s+/g, " ");
+
+        if (!nombre) return;
+
+        const materiales = obtenerMateriales();
+
+        const duplicado = materiales.some(
+            material =>
+                material.name.toLocaleLowerCase("es") ===
+                nombre.toLocaleLowerCase("es")
+        );
+
+        if (duplicado) {
+            showToast("Ese material ya está registrado.", "error");
+            return;
+        }
+
+        const nuevoMaterial = {
+            id: "material-" + crypto.randomUUID(),
+            name: nombre
+        };
+
+        materiales.push(nuevoMaterial);
+
+        try {
+            guardarMateriales(materiales);
+        } catch (error) {
+            console.error(error);
+            showToast("No se pudo guardar el material.", "error");
+            return;
+        }
+
+        formularioMateriales.reset();
+
+        mostrarMateriales();
+        actualizarSelectoresMateriales();
+        actualizarFiltrosMateriales();
+
+        showToast(`Material "${nombre}" agregado correctamente.`);
+    });
+}
+
+// Eliminar solamente materiales que no están en uso.
+function eliminarMaterial(id) {
+    const materiales = obtenerMateriales();
+
+    const material = materiales.find(item => item.id === id);
+    if (!material) return;
+
+    const enUso = model.getAll().some(
+        cuadro => cuadro.material === id
+    );
+
+    if (enUso) {
+        showToast(
+            "No podés eliminar un material utilizado por un cuadro.",
+            "error"
+        );
+        return;
+    }
+
+    if (!confirm(`¿Eliminar el material "${material.name}"?`)) {
+        return;
+    }
+
+    const actualizados = materiales.filter(
+        item => item.id !== id
+    );
+
+    try {
+        guardarMateriales(actualizados);
+    } catch (error) {
+        console.error(error);
+        showToast("No se pudo eliminar el material.", "error");
+        return;
+    }
+
+    mostrarMateriales();
+    actualizarSelectoresMateriales();
+    actualizarFiltrosMateriales();
+
+    showToast(`Material "${material.name}" eliminado.`);
+}
+
+// Crear los botones de filtros dinámicamente.
+function actualizarFiltrosMateriales() {
+    const contenedor = document.getElementById("materialFilters");
+    if (!contenedor) return;
+
+    contenedor.replaceChildren();
+
+    const opciones = [
+        { id: "all", name: "Todos" },
+        ...obtenerMateriales()
+    ];
+
+    opciones.forEach(material => {
+        const boton = document.createElement("button");
+
+        boton.type = "button";
+        boton.className = "btn btn-filter";
+        boton.dataset.material = material.id;
+        boton.textContent = material.name;
+
+        if (UI.currentMaterialFilter === material.id) {
+            boton.classList.add("active");
+        }
+
+        boton.addEventListener("click", () => {
+            UI.currentMaterialFilter = material.id;
+
+            contenedor.querySelectorAll(".btn-filter")
+                .forEach(item => item.classList.remove("active"));
+
+            boton.classList.add("active");
+            renderCatalog();
+        });
+
+        contenedor.appendChild(boton);
+    });
+}
+
+// Mantener sincronizado el selector al abrir la edición.
+document.getElementById("editModal")
+    ?.addEventListener("show.bs.modal", () => {
+        actualizarSelectorMaterial("editFrameMaterial");
+    });
+
+// Inicializar la nueva funcionalidad.
+mostrarMateriales();
+actualizarSelectoresMateriales();
+actualizarFiltrosMateriales();
+
+console.log("Gestión de Materiales activada.");
