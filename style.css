@@ -337,3 +337,285 @@ header {
         font-size: 1.4rem;
     }
 }
+
+/* =====================================
+   PANEL DE ADMINISTRACIÓN DESPLEGABLE
+   ===================================== */
+
+#managerPanel .glass-panel {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Separación entre el panel y el catálogo */
+#managerPanel {
+    margin-bottom: 10px;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+
+    #managerPanel .glass-panel {
+        max-width: 100%;
+    }
+
+    .brand-title {
+        text-align: center;
+    }
+}
+
+/* =====================================
+   CORRECCIÓN DEL SELECT ORDENAR POR
+   ===================================== */
+
+/* Cuadro principal */
+#sortBy {
+    background-color: #1b1e26 !important;
+    color: #ffffff !important;
+    border: 1px solid #4b5563;
+    cursor: pointer;
+}
+
+/* Opciones del menú desplegable */
+#sortBy option {
+    background-color: #1b1e26;
+    color: #ffffff;
+}
+
+/* Opción seleccionada */
+#sortBy option:checked {
+    background-color: #00a8b5;
+    color: #ffffff;
+}
+
+/* Cuando el usuario selecciona el cuadro */
+#sortBy:focus {
+    border-color: #00f2fe;
+    box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.2);
+}
+/* =====================================
+   ADAPTACIÓN RESPONSIVE DE VELOCRAFT
+   ===================================== */
+
+/* Evita que el contenido exceda el ancho disponible */
+#catalogGrid,
+#managerPanel {
+    min-width: 0;
+}
+
+/* Filtros de materiales */
+#materialFilters {
+    flex-wrap: wrap;
+}
+
+/* Selector de ordenamiento */
+#sortBy {
+    width: 100%;
+    max-width: 260px;
+    min-width: 0;
+    background-color: #1b1e26 !important;
+    color: #ffffff !important;
+}
+
+#sortBy option {
+    background-color: #1b1e26;
+    color: #ffffff;
+}
+
+/* Celulares */
+@media (max-width: 576px) {
+
+    #sortBy {
+        width: 100%;
+        max-width: 100%;
+        font-size: 14px;
+    }
+
+    #materialFilters .btn-filter {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .glass-panel {
+        max-width: 100%;
+    }
+
+    .frame-card-body {
+        padding: 14px;
+    }
+}
+
+/* =====================================
+   SELECTORES DEL FORMULARIO
+   ===================================== */
+
+/* Selectores de agregar y editar cuadros */
+#frameMaterial,
+#editFrameMaterial {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    background-color: #1b1e26 !important;
+    color: #ffffff !important;
+    border: 1px solid #4b5563;
+    font-size: 14px;
+}
+
+/* Opciones visibles con fondo oscuro */
+#frameMaterial option,
+#editFrameMaterial option {
+    background-color: #1b1e26;
+    color: #ffffff;
+}
+
+/* Resaltado al seleccionar */
+#frameMaterial:focus,
+#editFrameMaterial:focus {
+    border-color: #00f2fe;
+    box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.2);
+}
+
+/* Ajustes del formulario para celulares */
+@media (max-width: 576px) {
+    #managerPanel .glass-panel {
+        padding: 16px !important;
+    }
+
+    #frameMaterial,
+    #editFrameMaterial {
+        font-size: 13px;
+    }
+}
+
+/* ==========================================
+   MENÚ DE MATERIALES RESPONSIVE
+   ========================================== */
+
+.material-select-original {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.material-select-wrapper {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.material-select-button {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px;
+    background: #1b1e26;
+    color: #ffffff;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.material-select-button::after {
+    content: "⌄";
+    float: right;
+    margin-left: 8px;
+    color: #00f2fe;
+}
+
+.material-select-button:focus-visible {
+    outline: 2px solid #00f2fe;
+    outline-offset: 2px;
+}
+
+.material-select-options {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 1060;
+    background: #1b1e26;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.material-select-options[hidden] {
+    display: none !important;
+}
+
+.material-select-option {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: #ffffff;
+    text-align: left;
+    cursor: pointer;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+
+/* Opciones del menú */
+.material-select-option {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: transparent;
+    color: #ffffff;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                color 0.2s ease;
+}
+
+/* Resaltar la opción al pasar el cursor */
+.material-select-option:hover,
+.material-select-option:focus,
+.material-select-option:focus-visible {
+    background-color: #00a8b5 !important;
+    color: #ffffff !important;
+    outline: none;
+}
+
+/* Resaltar al presionar */
+.material-select-option:active {
+    background-color: #00f2fe !important;
+    color: #0f1013 !important;
+}
+
+
+@media (max-width: 576px) {
+    .material-select-button,
+    .material-select-option {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* Filtros de materiales dinámicos */
+#materialFilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+#materialFilters .btn-filter {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 576px) {
+    #materialFilters .btn-filter {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+}
