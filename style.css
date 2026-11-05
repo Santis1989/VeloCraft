@@ -337,3 +337,29 @@ header {
         font-size: 1.4rem;
     }
 }
+
+/* =====================================
+   PANEL DE ADMINISTRACIÓN DESPLEGABLE
+   ===================================== */
+
+#managerPanel .glass-panel {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Separación entre el panel y el catálogo */
+#managerPanel {
+    margin-bottom: 10px;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+
+    #managerPanel .glass-panel {
+        max-width: 100%;
+    }
+
+    .brand-title {
+        text-align: center;
+    }
+}

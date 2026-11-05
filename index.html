@@ -28,50 +28,55 @@
 
 <body>
 
-    <!-- Header Section -->
-    <header class="sticky-top py-3">
-        <div class="container-fluid px-md-5">
-            <div class="row align-items-center g-3">
+   
+<!-- Header Section -->
+<header class="sticky-top py-3">
+    <div class="container-fluid px-md-5">
+        <div class="row align-items-center g-3">
 
-                <div class="col-12 col-md-4 col-lg-3 text-center text-md-start">
-                    <h1 class="brand-title m-0">
-                        <i class="bi bi-hexagon-half me-2"></i>VELOCRAFT
-                    </h1>
-                </div>
-
-                <!-- Search and Filtering -->
-                <div class="col-12 col-sm-8 col-md-5 col-lg-6">
-                    <div class="input-group">
-                        <span class="input-group-text bg-transparent border-secondary text-secondary border-end-0">
-                            <i class="bi bi-search"></i>
-                        </span>
-
-                        <input
-                            type="text"
-                            id="searchInput"
-                            class="form-control bg-transparent border-secondary border-start-0 text-white"
-                            placeholder="Buscar cuadro por nombre o características..."
-                        >
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-4 col-md-3 col-lg-3 text-center text-sm-end">
-                    <button
-                        class="btn btn-premium w-100"
-                        id="btnToggleManager"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#managerPanel"
-                        aria-expanded="false"
-                        aria-controls="managerPanel"
-                    >
-                        <i class="bi bi-sliders me-2"></i>Consola Admin
-                    </button>
-                </div>
-
+            <!-- CONSOLA ADMIN A LA IZQUIERDA -->
+            <div class="col-12 col-md-3 order-1">
+                <button
+                    class="btn btn-premium w-100"
+                    id="btnToggleManager"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#managerPanel"
+                    aria-expanded="false"
+                    aria-controls="managerPanel"
+                >
+                    <i class="bi bi-sliders me-2"></i>
+                    Consola Admin
+                </button>
             </div>
+
+            <!-- BUSCADOR EN EL CENTRO -->
+            <div class="col-12 col-md-6 order-3 order-md-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-secondary text-secondary border-end-0">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="form-control bg-transparent border-secondary border-start-0 text-white"
+                        placeholder="Buscar cuadro por nombre o características..."
+                    >
+                </div>
+            </div>
+
+            <!-- LOGO VELOCRAFT A LA DERECHA -->
+            <div class="col-12 col-md-3 order-2 order-md-3 text-center text-md-end">
+                <h1 class="brand-title m-0">
+                    <i class="bi bi-hexagon-half me-2"></i>
+                    VELOCRAFT
+                </h1>
+            </div>
+
         </div>
-    </header>
+    </div>
+</header>
 
     <!-- Main Content Area -->
     <main class="container-fluid px-md-5 py-4">
@@ -122,9 +127,9 @@
 
             <!-- Sidebar Admin Panel -->
             <aside
-                class="col-12 col-lg-4 col-xl-3 collapse show"
-                id="managerPanel"
-            >
+                  class="col-12 collapse"
+                  id="managerPanel"
+>
                 <div class="glass-panel p-4 h-100">
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -357,8 +362,8 @@
                 </div>
             </aside>
 
-            <!-- Catalog Section -->
-            <section class="col-12 col-lg-8 col-xl-9">
+                <!-- Catalog Section -->
+                    <section class="col-12">
 
                 <div class="glass-panel p-4 mb-4">
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
